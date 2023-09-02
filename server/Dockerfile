@@ -2,6 +2,7 @@ ARG DOCKER_HUB_PROXY=""
 
 # PHP7.4 explicitly because of ssdeep being incompatible with PHP 8.2
 FROM "${DOCKER_HUB_PROXY}ubuntu:22.04" as composer-build
+
     ENV DEBIAN_FRONTEND noninteractive
     ENV COMPOSER_ALLOW_SUPERUSER 1
     ARG MISP_TAG
@@ -45,6 +46,7 @@ FROM "${DOCKER_HUB_PROXY}ubuntu:22.04" as php-build
     ENV TZ Etc/UTC
     RUN apt-get update && apt-get install -y --no-install-recommends gpg-agent software-properties-common && add-apt-repository -y ppa:ondrej/php \
         && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
     RUN apt-get update; apt-get install -y --no-install-recommends \
         gcc \
         g++ \
@@ -74,6 +76,7 @@ FROM "${DOCKER_HUB_PROXY}ubuntu:22.04" as python-build
     RUN pip3 wheel --no-cache-dir -w /wheels/ plyara pyzmq redis python-magic lief>=0.13.1 pymisp pydeep2 misp-lib-stix2 stix cybox maec mixbox
 
 FROM "${DOCKER_HUB_PROXY}ubuntu:22.04"
+
     ENV DEBIAN_FRONTEND noninteractive
     ARG MISP_TAG
     ARG MISP_COMMIT
